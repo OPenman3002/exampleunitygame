@@ -6,6 +6,7 @@ public class player : MonoBehaviour {
 
 
 	public float speed = 5;
+    public float jumpSpeed = 10;
 	public float health = 100;
     public float invulDuration = 1;
     public float blinkDuration = 0.25f;
@@ -27,6 +28,15 @@ public class player : MonoBehaviour {
 
         //Set our Velocity based on the input and our speed value
         Velocity.x = horizontal * speed;
+
+        // Jump logic
+        bool jumpPressed = Input.GetButtonDown("Jump");
+
+        if (jumpPressed == true){
+
+            Velocity.y = jumpSpeed;
+        }
+
 
         ourRigidBody.velocity = Velocity;
 
