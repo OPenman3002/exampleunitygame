@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class player : MonoBehaviour {
 
-
+    private float jumps = 0;
 	public float speed = 5;
     public float jumpSpeed = 10;
 	public float health = 100;
@@ -12,6 +12,7 @@ public class player : MonoBehaviour {
     public float blinkDuration = 0.25f;
     private float invulEndTime = 0;
     private float blinkEndTime = 0;
+    private bool hasDoubleJump = false;
 	// Use this for initialization
 	void start() {
 	}
@@ -29,12 +30,36 @@ public class player : MonoBehaviour {
         //Set our Velocity based on the input and our speed value
         Velocity.x = horizontal * speed;
 
+        // Determine if touching ground 
+        // Get the collider attached to this object
+        Collider2D ourCollider = GetComponent<Collider2D>();
+
+        // Get the LayerMask for the ground layer - we need this for the next function call
+        LayerMask groundLayer = LayerMask.GetMask("Ground");
+
+        //Ask the collider if we are touching this layer
+        bool isTouchingGround = ourCollider.IsTouchingLayers(groundLayer);
+        
+        // if were touching the ground reset our double jump to false
+        if (isTouchingGround == true)
+             hasDoubleJump = false;
         // Jump logic
+       
+
         bool jumpPressed = Input.GetButtonDown("Jump");
 
-        if (jumpPressed == true){
+        bool allowedToJump = isTouchingGround;
+        if (isTouchingGround == false && hasDoubleJump == false)
+            allowedToJump = true;
+        
+
+        if (jumpPressed == true && allowedToJump == true)
+        {
+
 
             Velocity.y = jumpSpeed;
+            if (isTouchingGround == false)
+                hasDoubleJump = true;
         }
 
 
